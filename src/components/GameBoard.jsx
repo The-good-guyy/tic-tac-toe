@@ -4,14 +4,21 @@ const initialGameBoard = [
   [null, null, null],
   [null, null, null],
 ];
-function GameBoard(props) {
-  const [gameBoard, setGameBoard] = useState(initialGameBoard);
-  function handleSelectSquare(rowIndes, colIndex) {
-    setGameBoard((prestate) => {
-      const updatedBoard = [...prestate.map((innerArray) => [...innerArray])];
-      updatedBoard[rowIndes][colIndex] = "X";
-      return updatedBoard;
-    });
+function GameBoard({ onSelectSquare, turns }) {
+  // const [gameBoard, setGameBoard] = useState(initialGameBoard);
+  // function handleSelectSquare(rowIndes, colIndex) {
+  //   setGameBoard((prestate) => {
+  //     const updatedBoard = [...prestate.map((innerArray) => [...innerArray])];
+  //     updatedBoard[rowIndes][colIndex] = activePlayer;
+  //     return updatedBoard;
+  //   });
+  //   onSelectSquare();
+  // }
+  let gameBoard = initialGameBoard;
+  for (const turn of turns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+    gameBoard[row][col] = player;
   }
   return (
     <ol id="game-board">
@@ -22,8 +29,9 @@ function GameBoard(props) {
               <li key={colIndex}>
                 <button
                   onClick={() => {
-                    handleSelectSquare(rowIndex, colIndex);
+                    onSelectSquare(rowIndex, colIndex);
                   }}
+                  disabled={playerSymbol !== null}
                 >
                   {playerSymbol}
                 </button>
